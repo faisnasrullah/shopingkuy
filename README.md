@@ -1,0 +1,7 @@
+## Shopingkuy
+
+Shopingkuy
+
+#### License
+
+MIT

@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include shopingkuy *.css
+recursive-include shopingkuy *.csv
+recursive-include shopingkuy *.html
+recursive-include shopingkuy *.ico
+recursive-include shopingkuy *.js
+recursive-include shopingkuy *.json
+recursive-include shopingkuy *.md
+recursive-include shopingkuy *.png
+recursive-include shopingkuy *.py
+recursive-include shopingkuy *.svg
+recursive-include shopingkuy *.txt
+recursive-exclude shopingkuy *.pyc
