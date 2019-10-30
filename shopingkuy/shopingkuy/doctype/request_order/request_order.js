@@ -25,23 +25,30 @@ frappe.ui.form.on('Request Order', {
 	}
 });
 
-// frappe.ui.form.on("Request Order", "request_order_line", function(frm, cdt, cdn) {
-	// var child = locals[cdt][cdn];
-	// frm.refresh_field("sub_total");
+frappe.ui.form.on("Request Order Line", {
+	harga_produk: function(frm, cdt, cdn) {
+		sub_total(frm, cdt, cdn);
+	},
+	jumlah_pembelian: function(frm, cdt, cdn) {
+		sub_total(frm, cdt, cdn);
+	}
+});
 
-	// id_product_on_form_rendered: function(frm) {
-    //     frappe.model.with_doc("Request Order Line", frm.doc.form_render, function() {
-	// 		var tabletransfer = frappe.model.get_doc("Request Order Line", frm.doc.id_product_add)
-	// 		console.log(tabletransfer);
-			
-    //         $.each(tabletransfer.total_pembayaran, function(index, row){
-    //             var d = frm.add_child("Request Order");
-    //             d.price = row.total_pembayaran;
-    //             frm.refresh_field("total_pembayaran");
-    //         });
-    //     });
-	// }
-// });
+let sub_total = function(frm, cdt, cdn) {
+	let child = locals[cdt][cdn]
+	frappe.model.set_value(cdt, cdn, "sub_total", child.harga_produk * child.jumlah_pembelian);
+}
+
+frappe.ui.form.on("Request Order Line", "sub_total", function(frm, cdt, cdn) {
+	let sub_total = frm.doc.request_order_line;
+	let total = 0;
+	
+	for (let i in sub_total) {
+		total = total + sub_total[i].sub_total;
+	}
+	
+	frm.set_value("total_pembayaran", total);
+});
 
 function tanggal_pemesanan() {
 	let d = new Date(frappe.datetime.now_datetime());
