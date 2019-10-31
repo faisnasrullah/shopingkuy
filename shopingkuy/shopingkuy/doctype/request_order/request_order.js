@@ -22,6 +22,13 @@ frappe.ui.form.on('Request Order', {
 				]
 			}
 		});
+	},
+
+	level_user: function(frm) {
+		hitung_poin(frm);
+	},
+	total_pembayaran: function(frm) {
+		hitung_poin(frm);
 	}
 });
 
@@ -82,4 +89,38 @@ function tanggal_pemesanan() {
 
 	let custom_datetime = dd +'-'+ mm +'-'+ yyyy + ' ' + h + ':' + m + ':' + s;
 	return custom_datetime;
+}
+
+let hitung_poin = function(frm) {
+	let total_pembayaran = frm.doc.total_pembayaran;
+	let level_user = frm.doc.level_user;
+	let poin = 0;
+
+	if (total_pembayaran <= 100000) {
+		if (level_user == 'Bronze') {
+			poin = poin + 10;
+		} else if (level_user == 'Silver') {
+			poin = poin + 15;
+		} else {
+			poin = poin + 20;
+		}
+	} else if (total_pembayaran <= 500000) {
+		if (level_user == 'Bronze') {
+			poin = poin + 15;
+		} else if (level_user == 'Silver') {
+			poin = poin + 20;
+		} else {
+			poin = poin + 25;
+		}
+	} else {
+		if (level_user == 'Bronze') {
+			poin = poin + 20;
+		} else if (level_user == 'Silver') {
+			poin = poin + 25;
+		} else {
+			poin = poin + 30;
+		}
+	}
+
+	frm.set_value('poin_pembeli', poin);
 }
