@@ -44,12 +44,26 @@ frappe.ui.form.on("Request Order Line", {
 	},
 	sub_total: function(frm, cdt, cdn) {
 		hitung_poin_penjual(frm, cdt, cdn);
+	},
+	jumlah_pembelian: function(frm, cdt, cdn) {
+		validasi_jumlah_pembelian(frm, cdt, cdn);
 	}
 });
 
 let sub_total = function(frm, cdt, cdn) {
 	let child = locals[cdt][cdn];
 	frappe.model.set_value(cdt, cdn, "sub_total", child.harga_produk * child.jumlah_pembelian);
+}
+
+let validasi_jumlah_pembelian = function(frm, cdt, cdn) {
+	let child = locals[cdt][cdn];
+	let persediaan_produk = child.persediaan_produk;
+	let jumlah_pembelian = child.jumlah_pembelian;
+
+	if (jumlah_pembelian > persediaan_produk) {
+		frappe.model.set_value(cdt, cdn, 'jumlah_pembelian', 1);
+		frappe.msgprint('Jumlah Pembelian Produk Tidak Boleh Lebih Dari Persediaan Produk');
+	}
 }
 
 let hitung_poin_penjual = function(frm, cdt, cdn) {
@@ -83,7 +97,7 @@ let hitung_poin_penjual = function(frm, cdt, cdn) {
 			poin = poin + 30;
 		}
 	}
-	
+
 	frappe.model.set_value(cdt, cdn, 'poin_penjual', poin);
 }
 
