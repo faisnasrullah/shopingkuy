@@ -25,10 +25,10 @@ frappe.ui.form.on('Request Order', {
 	},
 
 	level_user: function(frm) {
-		hitung_poin(frm);
+		hitung_poin_pembeli(frm);
 	},
 	total_pembayaran: function(frm) {
-		hitung_poin(frm);
+		hitung_poin_pembeli(frm);
 	}
 });
 
@@ -38,12 +38,53 @@ frappe.ui.form.on("Request Order Line", {
 	},
 	jumlah_pembelian: function(frm, cdt, cdn) {
 		sub_total(frm, cdt, cdn);
+	},
+	level_user: function(frm, cdt, cdn) {
+		hitung_poin_penjual(frm, cdt, cdn);
+	},
+	sub_total: function(frm, cdt, cdn) {
+		hitung_poin_penjual(frm, cdt, cdn);
 	}
 });
 
 let sub_total = function(frm, cdt, cdn) {
-	let child = locals[cdt][cdn]
+	let child = locals[cdt][cdn];
 	frappe.model.set_value(cdt, cdn, "sub_total", child.harga_produk * child.jumlah_pembelian);
+}
+
+let hitung_poin_penjual = function(frm, cdt, cdn) {
+	let child = locals[cdt][cdn];
+	let level_user = child.level_user;
+	let sub_total = child.sub_total;
+	let poin = 0;
+
+	if (sub_total <= 100000) {
+		if (level_user == 'Bronze') {
+			poin = poin + 10;
+		} else if (level_user == 'Silver') {
+			poin = poin + 15;
+		} else {
+			poin = poin + 20;
+		}
+	} else if (sub_total <= 500000) {
+		if (level_user == 'Bronze') {
+			poin = poin + 15;
+		} else if (level_user == 'Silver') {
+			poin = poin + 20;
+		} else {
+			poin = poin + 25;
+		}
+	} else {
+		if (level_user == 'Bronze') {
+			poin = poin + 20;
+		} else if (level_user == 'Silver') {
+			poin = poin + 25;
+		} else {
+			poin = poin + 30;
+		}
+	}
+	
+	frappe.model.set_value(cdt, cdn, 'poin_penjual', poin);
 }
 
 frappe.ui.form.on("Request Order Line", "sub_total", function(frm, cdt, cdn) {
@@ -91,7 +132,7 @@ function tanggal_pemesanan() {
 	return custom_datetime;
 }
 
-let hitung_poin = function(frm) {
+let hitung_poin_pembeli = function(frm) {
 	let total_pembayaran = frm.doc.total_pembayaran;
 	let level_user = frm.doc.level_user;
 	let poin = 0;
