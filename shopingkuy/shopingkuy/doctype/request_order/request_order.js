@@ -6,7 +6,7 @@ frappe.ui.form.on('Request Order', {
 		frm.set_value('tanggal_pemesanan', tanggal_pemesanan());
 	},
 
-	onload(frm) {
+	refresh(frm) {
 		frm.set_query('id_user', function() {
 			return {
 				filters: [
@@ -24,6 +24,12 @@ frappe.ui.form.on('Request Order', {
 				]
 			}
 		});
+
+		console.log("State Sekarang adalah : " + frm.doc.workflow_state);
+	},
+
+	validate(frm) {
+		console.log("State Selanjutnya adalah : " + frm.doc.next_workflow_state);
 	},
 
 	level_user: function(frm) {
@@ -61,7 +67,7 @@ frappe.ui.form.on("Request Order Line", "sub_total", function(frm, cdt, cdn) {
 	frm.set_value("total_pembayaran", total);
 });
 
-let tanggal_pemesanan = function(frm) {
+function tanggal_pemesanan() {
 	let d = new Date(frappe.datetime.now_datetime());
 
 	let dd = d.getDate();

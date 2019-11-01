@@ -31,6 +31,8 @@ class RequestOrder(Document):
 					'id_produk' : i.id_produk,
 					'nama_produk' : i.nama_produk,
 					'harga_produk' : i.harga_produk,
+					'diskon' : i.diskon,
+					'persediaan_produk' : i.persediaan_produk,
 					'jumlah_pembelian' : i.jumlah_pembelian,
 					'sub_total' : i.sub_total
 				})
