@@ -85,7 +85,16 @@ class RequestOrder(Document):
 				stock = frappe.db.get_value('Master Product', i.id_produk, 'persediaan_produk')
 				persediaan_produk = stock - i.jumlah_pembelian
 				frappe.db.set_value("Master Product", i.id_produk, 'persediaan_produk', persediaan_produk) # Set Value Persediaan Produk
-				
+				frappe.db.commit()
+
+				# Update Level User
+				cek_poin = frappe.db.get_value("Master User", i.id_user, 'poin')
+				if (cek_poin < 500):
+					frappe.db.set_value("Master User", i.id_user, 'level_user', 'Bronze')
+				elif (cek_poin < 1000):
+					frappe.db.set_value("Master User", i.id_user, 'level_user', 'Silver')
+				else:
+					frappe.db.set_value("Master User", i.id_user, 'level_user', 'Gold')
 				frappe.db.commit()
 				
 
@@ -97,6 +106,16 @@ class RequestOrder(Document):
 			frappe.db.set_value("Master User", self.id_user, 'poin', poin_pembeli)
 			frappe.db.commit()
 
+			# Udate Level User
+			cek_poin = frappe.db.get_value("Master User", self.id_user, 'poin')
+			if (cek_poin < 500):
+				frappe.db.set_value("Master User", self.id_user, 'level_user', 'Bronze')
+			elif (cek_poin < 1000):
+				frappe.db.set_value("Master User", self.id_user, 'level_user', 'Silver')
+			else:
+				frappe.db.set_value("Master User", self.id_user, 'level_user', 'Gold')
+			frappe.db.commit()
+			
 			order.save()
 
 			new_order = frappe.get_doc('Order', order.name)

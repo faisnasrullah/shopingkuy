@@ -109,6 +109,11 @@ let validasi_jumlah_pembelian = function(frm, cdt, cdn) {
 	if (jumlah_pembelian > persediaan_produk) {
 		frappe.model.set_value(cdt, cdn, 'jumlah_pembelian', 1);
 		frappe.msgprint('Jumlah Pembelian Produk Tidak Boleh Lebih Dari Persediaan Produk');
+	} else if (jumlah_pembelian < 1) {
+		frappe.model.set_value(cdt, cdn, 'jumlah_pembelian', 1);
+		frappe.msgprint('Jumlah Pembelian Tidak Boleh Kurang Dari 0');
+	} else {
+		frappe.model.set_value(cdt, cdn, 'jumlah_pembelian', jumlah_pembelian);
 	}
 }
 
