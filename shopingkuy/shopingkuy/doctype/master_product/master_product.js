@@ -10,6 +10,12 @@ frappe.ui.form.on('Master Product', {
 				]
 			}
 		});
+
+		if (frm.doc.persediaan_produk >= 1) {
+			frm.set_value('status_produk', 'Tersedia');
+		} else {
+			frm.set_value('status_produk', 'Habis');
+		}
 	},
 
 	persediaan_produk(frm) {

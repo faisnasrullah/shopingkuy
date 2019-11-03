@@ -28,9 +28,9 @@ frappe.ui.form.on('Request Order', {
 		console.log("State Sekarang adalah : " + frm.doc.workflow_state);
 	},
 
-	validate(frm) {
-		console.log("State Selanjutnya adalah : " + frm.doc.next_workflow_state);
-	},
+	// validate(frm) {
+	// 	console.log("State Selanjutnya adalah : " + frm.doc.next_workflow_state);
+	// },
 
 	level_user: function(frm) {
 		hitung_poin_pembeli(frm);
